@@ -1,4 +1,5 @@
 // import React from 'react'
+import Spinner from './components/Spinner'
 import { useState, useEffect } from 'react'
 import Search from './components/Search'
 
@@ -59,7 +60,6 @@ const App = () => {
   return (
     <main>
 
-
       <div className='pattern' />
 
       <div className='wrapper'>
@@ -74,7 +74,7 @@ const App = () => {
           {/* {errorMessage && <p className='text-red-500'>{errorMessage}</p>} */}
 
           {isLoading ? (
-            <p className='text-white'>loading...</p>
+            <Spinner/>
           ) : errorMessage ? (
             <p className='text-re-500'>{errorMessage}</p>
           ) : (
