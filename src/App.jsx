@@ -2,8 +2,9 @@
 import Spinner from './components/Spinner'
 import { useState, useEffect } from 'react'
 import Search from './components/Search'
+import MovieCard from './components/MovieCard';
 
-// const API_BASE_URL = 'https://api.themoviedb.org/3';
+const API_BASE_URL = 'https://api.themoviedb.org/3';
 const API_KEY = import.meta.env.VITE_TMBD_API_KEY;
 const API_OPTIONS = {
   method: 'GET',
@@ -21,12 +22,14 @@ const App = () => {
   const [movieList, setMovieList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchMovies = async () => {
+  const fetchMovies = async ( query  = ' ') => {
     setIsLoading(true); // Set loading to true
     setErrorMessage(''); // Clear any error messages
 
     try {
-      const endpoint = `https://api.themoviedb.org/3/discover/movie`;
+      const endpoint = query 
+      ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
+      : `${API_BASE_URL}/discover/movie?sort_by=popularity.desc&api_key=${API_KEY}`;
       const response = await fetch(endpoint, API_OPTIONS);
 
       if (!response.ok) {
@@ -54,8 +57,8 @@ const App = () => {
 
 
   useEffect(() => {
-    fetchMovies();
-  }, [])
+    fetchMovies( searchTerm );
+  }, [ searchTerm ])
 
   return (
     <main>
@@ -70,7 +73,7 @@ const App = () => {
         </header>
 
         <section className='all-movies'>
-          <h2>All Movies</h2>
+          <h2 className="mt-[40px]">All Movies</h2>
           {/* {errorMessage && <p className='text-red-500'>{errorMessage}</p>} */}
 
           {isLoading ? (
@@ -80,7 +83,7 @@ const App = () => {
           ) : (
             <ul>
               {movieList.map((movie) => (
-                <p key={movie.id} className='text-white'>{movie.title}</p>
+                <MovieCard key={movie.id} movie={movie} />
               ))}
             </ul>
           )}
