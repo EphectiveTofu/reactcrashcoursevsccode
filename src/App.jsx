@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Search from './components/Search'
 import MovieCard from './components/MovieCard';
 import { useDebounce } from 'react-use';
+import { updateSearchCount } from './appwrite.js';
 
 const API_BASE_URL = 'https://api.themoviedb.org/3';
 const API_KEY = import.meta.env.VITE_TMBD_API_KEY;
@@ -51,6 +52,9 @@ const App = () => {
       }
 
       setMovieList(data.results || []);
+
+      updateSearchCount();
+
     } catch (error) {
       console.error(`Error grabbing your movie: ${error}`);
       setErrorMessage('Sorry, we could not find any movies for you.');
